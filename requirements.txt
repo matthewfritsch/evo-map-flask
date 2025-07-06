@@ -1,6 +1,7 @@
 attrs
 flask==3.0.3
 folium
+libsql
 requests
 pandas
 numpy

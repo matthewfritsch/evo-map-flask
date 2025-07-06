@@ -1,21 +1,23 @@
-import os
 from flask import Flask
-from server.constants import CURRENT_MAP_LOC, ALL_MAP_LOC
-from server.update_thread import run_map_update_thread
+
+from server.map_class import read_all_map, read_ant_map, read_current_map
 
 app = Flask(__name__)
 
-run_map_update_thread(os.environ["SQLITE_CLOUD_URL"])
+# run_map_update_thread()
 
 
 @app.route("/")
 @app.route("/current")
 def show_map():
-    with open(CURRENT_MAP_LOC, "r") as f:
-        return f.read()
+    return read_current_map()
 
 
 @app.route("/all")
-def show_refresh_map():
-    with open(ALL_MAP_LOC, "r") as f:
-        return f.read()
+def show_all_map():
+    return read_all_map()
+
+
+@app.route("/ant")
+def show_ant_map():
+    return read_ant_map()

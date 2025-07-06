@@ -26,8 +26,9 @@ MAP_BOUNDS = list(
     )
 )
 MAP_CENTER = Coordinate(lat=36.55, lon=-171.99)
-CURRENT_MAP_LOC = "server/templates/map.html"
-ALL_MAP_LOC = "server/templates/refresh.html"
+CURRENT_MAP = "current"
+ALL_MAP = "all"
+ANT_MAP = "ant"
 ICON_SCALE = 0.15
 SHIP_ICON = folium.CustomIcon(
     icon_image="server/icons/ship_icon.png",
