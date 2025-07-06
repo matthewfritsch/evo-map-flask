@@ -1,1 +1,8 @@
-Flask==3.0.3
+attrs
+flask==3.0.3
+folium
+requests
+pandas
+numpy
+websockets
+sqlitecloud>=0.0.84
