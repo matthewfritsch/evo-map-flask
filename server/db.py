@@ -1,41 +1,31 @@
 import os
 from easydict import EasyDict
 from contextlib import contextmanager
-from datetime import datetime
+from datetime import UTC, datetime
 from server.types import TimedCoordinate
 from supabase import create_client, Client
 
 __supabase_client: Client | None = None
 
-TURSO_URL = os.getenv("TURSO_DATABASE_URL")
-TURSO_AUTH_TOKEN = os.getenv("TURSO_AUTH_TOKEN")
-
-
-# def setup_db():
-#     with _db(COORDINATE_DB) as database:
-#         cmd = """CREATE TABLE COORDINATES (
-#             Time TIMESTAMP,
-#             Latitude REAL,
-#             Longitude REAL);"""
-#         try:
-#             _ = database.execute(cmd)
-#         except Exception:
-#             print("COORDINATES already exists. Continuing...")
-#
-#     with _db(WEBPAGE_DB) as database:
-#         cmd = """CREATE TABLE WEBPAGE (
-#             Time TIMESTAMP,
-#             Name TEXT,
-#             Contents CLOB);"""
-#         try:
-#             _ = database.execute(cmd)
-#         except Exception:
-#             print("WEBPAGE already exists. Continuing...")
-
 
 def get_all_coords() -> list[TimedCoordinate]:
     with _db() as database:
         response = database.table("coordinates").select("*").order("time", desc=False).execute()
+        easy = [EasyDict(val) for val in response.data]
+        return [
+            TimedCoordinate(timestamp=datetime.fromisoformat(e.time), lat=e.latitude, lon=e.longitude) for e in easy
+        ]
+
+
+def get_ant_coords() -> list[TimedCoordinate]:
+    with _db() as database:
+        response = (
+            database.table("coordinates")
+            .select("*")
+            .order("time", desc=False)
+            .gt("time", datetime(year=2025, month=7, day=6, tzinfo=UTC).isoformat())
+            .execute()
+        )
         easy = [EasyDict(val) for val in response.data]
         return [
             TimedCoordinate(timestamp=datetime.fromisoformat(e.time), lat=e.latitude, lon=e.longitude) for e in easy
