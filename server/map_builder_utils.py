@@ -34,7 +34,7 @@ def build_all_coords_map(map_obj, current_coord: TimedCoordinate) -> dict[str, s
 
 
 def build_antpath_map(map_obj) -> dict[str, str]:
-    ant_coords = get_ant_coords()
+    ant_coords = list(map(lambda c: c.to_values(), get_ant_coords()))
     plugins.AntPath(locations=ant_coords, dash_array=[20, 30]).add_to(map_obj)
     buf = io.BytesIO()
     map_obj.save(buf, close_file=False)
