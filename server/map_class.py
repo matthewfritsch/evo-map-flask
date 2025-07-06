@@ -3,7 +3,7 @@ import folium
 import folium.plugins as plugins
 import io
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from server.buffers import read_all
 from server.constants import (
     ANT_MAP,
@@ -29,7 +29,7 @@ def update_map(mapname: str) -> str:
     now = datetime.now()
 
     latest_map_time, latest_map_content = get_latest_webpage(mapname)
-    if datetime.fromisoformat(latest_map_time) + timedelta(minutes=30) >= now:
+    if datetime.fromisoformat(latest_map_time) + timedelta(minutes=20) >= now.astimezone(UTC):
         return latest_map_content
 
     current_coord = get_newest_coord()
@@ -49,14 +49,13 @@ def update_map(mapname: str) -> str:
     for name, content in webpages.items():
         submit_webpage(name, content)
 
+    print(type(webpages[mapname]))
     return webpages[mapname]
 
 
 def build_current_coords_map(map_obj) -> dict[str, str]:
     buf = io.BytesIO()
     map_obj.save(buf, close_file=False)
-    with open("test.html", "w") as f:
-        f.write(read_all(buf))
     return {CURRENT_MAP: add_timeout(buf)}
 
 
@@ -92,7 +91,8 @@ def within_hour(a: datetime, b: datetime) -> bool:
 
 
 def add_timeout(webpage: io.BytesIO) -> str:
-    lines = read_all(webpage)
+    lines = read_all(webpage).split("\n")
+    print(lines[:3])
     added_lines = [
         "setInterval(function() {",
         "    location.reload();",

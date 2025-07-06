@@ -1,9 +1,10 @@
 attrs
+easydict
 flask==3.0.3
 folium
-libsql
 requests
 pandas
 numpy
 websockets
+supabase
 sqlitecloud>=0.0.84
