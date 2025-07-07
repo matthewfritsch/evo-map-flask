@@ -34,4 +34,4 @@ SHIP_ICON = folium.CustomIcon(
     icon_image="server/icons/ship_icon.png",
     icon_size=(int(355 * ICON_SCALE), int(161 * ICON_SCALE)),
 )
-UPDATE_INTERVAL_MS = _as_milliseconds(minutes=5)
+UPDATE_INTERVAL_MS = _as_milliseconds(minutes=60)
