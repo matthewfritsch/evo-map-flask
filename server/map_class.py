@@ -26,11 +26,10 @@ def update_map(mapname: str) -> str:
         return latest_map_content
 
     current_coord = get_newest_coord()
-
-    msg = f"{now}\n({current_coord.lat},{current_coord.lon})"
+    msg = current_coord.popup_format()
     map_obj = folium.Map(location=MAP_CENTER.to_values(), zoom_start=3)
     _ = folium.Marker(current_coord.to_values(), popup=msg, icon=SHIP_ICON).add_to(map_obj)
-    map_obj.fit_bounds(MAP_BOUNDS)
+    # map_obj.fit_bounds(MAP_BOUNDS)
 
     webpages = {
         **build_current_coords_map(map_obj),
